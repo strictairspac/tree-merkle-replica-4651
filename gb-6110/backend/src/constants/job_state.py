@@ -5,3 +5,4 @@ class JobState(StrEnum):
     QUEUED = "queued"
     DONE = "done"
     FAILED = "failed"
+    WITHHELD = "withheld"

@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 
 from src.config.resources import engine
 from src.controllers.access import identity, operator
-from src.controllers.workbench import new_case, new_run
-from src.schemas.cases import CaseEntry, CaseInput
+from src.controllers.workbench import append_journal, new_case, new_run
+from src.schemas.cases import CaseEntry, CaseInput, JournalInput
 from src.schemas.runs import RunEntry, RunInput
 from src.services import cases
 
@@ -30,3 +30,8 @@ def register(form: CaseInput, user=Depends(operator)):
 @router.post("/{case_id}/runs", response_model=RunEntry, status_code=202)
 def schedule(case_id: int, form: RunInput, user=Depends(operator)):
     return new_run(case_id, form, user)
+
+
+@router.post("/{case_id}/journal", response_model=CaseEntry, status_code=201)
+def supplement(case_id: int, form: JournalInput, user=Depends(operator)):
+    return append_journal(case_id, form, user)

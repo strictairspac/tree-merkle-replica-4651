@@ -26,7 +26,8 @@ def service_one():
         payload = db.scalar(select(cases.c.payload).where(cases.c.id == task["case_id"]))
         try:
             result = scenario.run(payload, task["parameter"], db)
-            output = {"status": JobState.DONE, "result": result, "digest": content_digest(result)}
+            status = JobState.WITHHELD if result.get("gaps") else JobState.DONE
+            output = {"status": status, "result": result, "digest": content_digest(result)}
         except Exception as exc:
             # Let the failed database transaction roll back before persisting the error.
             raise JobFailure(task["id"], exc) from exc

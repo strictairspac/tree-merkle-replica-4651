@@ -50,6 +50,8 @@ export async function evidencePage(config, user, route) {
     issue, options,
     el("section", {class: "feature evidence-summary"}, el("div", {}, el("h2", {}, "批次判定"), el("p", {}, run.result.summary)),
       el("details", {}, el("summary", {}, "证据摘要"), el("code", {}, run.digest))),
+    run.result.sheet ? section("核查单", el("dl", {class: "metrics sheet-metrics"},
+      Object.entries(run.result.sheet).map(([label, value]) => el("div", {}, el("dt", {}, label), el("dd", {}, cell(value)))))) : null,
     el("dl", {class: "metrics"}, Object.entries(run.result.metrics).map(([label, value]) =>
       el("div", {}, el("dt", {}, label), el("dd", {}, cell(value))))),
     section("业务结果明细", run.result.rows.length ? resultTable(run.result.rows) : empty("此批次无明细。")),

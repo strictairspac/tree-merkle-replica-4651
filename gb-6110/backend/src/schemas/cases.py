@@ -27,3 +27,7 @@ class CaseEntry(CaseInput):
     id: int
     code: str
     created_by: str
+
+
+class JournalInput(BaseModel):
+    records: list[dict] = Field(min_length=1, max_length=1000)

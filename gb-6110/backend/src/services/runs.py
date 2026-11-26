@@ -1,7 +1,7 @@
 from time import time
 
 from fastapi import HTTPException
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, update
 
 from src.constants.job_state import JobState
 from src.domain.scenario import CONFIG
@@ -34,4 +34,18 @@ def enqueue(db, case_id, parameter, actor):
     ))
     run_id = change.inserted_primary_key[0]
     audit.record(db, "enqueue", actor, "run", run_id)
+    return get(db, run_id)
+
+
+def resume(db, run_id, actor):
+    statement = select(runs).where(runs.c.id == run_id).with_for_update()
+    run = db.execute(statement).mappings().first()
+    if run is None:
+        raise HTTPException(404, "执行批次不存在")
+    if run["status"] != JobState.WITHHELD:
+        raise HTTPException(409, "仅暂缓出单的批次可以补缺续跑；已出的单不再更改")
+    db.execute(update(runs).where(runs.c.id == run_id).values(
+        status=JobState.QUEUED, result=None, failure=None, digest=None, finished_at=None,
+    ))
+    audit.record(db, "resume", actor, "run", run_id)
     return get(db, run_id)

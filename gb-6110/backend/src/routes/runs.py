@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 
 from src.config.resources import engine
 from src.constants.job_state import JobState
-from src.controllers.access import identity, reviewer
-from src.controllers.workbench import new_review
+from src.controllers.access import identity, operator, reviewer
+from src.controllers.workbench import new_review, resume_run
 from src.schemas.reviews import ReviewEntry, ReviewInput
 from src.schemas.runs import RunEntry
 from src.services import reviews, runs
@@ -34,6 +34,11 @@ def review_detail(run_id: int):
 @router.post("/{run_id}/review", response_model=ReviewEntry, status_code=201)
 def sign(run_id: int, form: ReviewInput, user=Depends(reviewer)):
     return new_review(run_id, form, user)
+
+
+@router.post("/{run_id}/resume", response_model=RunEntry, status_code=202)
+def resume(run_id: int, user=Depends(operator)):
+    return resume_run(run_id, user)
 
 
 @router.get("/{run_id}/export", dependencies=[Depends(identity)])

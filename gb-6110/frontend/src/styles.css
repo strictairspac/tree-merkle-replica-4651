@@ -86,6 +86,7 @@ nav a[aria-current=page], nav a:hover { background: var(--rail-highlight); borde
 .stack { display: grid; gap: .65rem; }
 .status { font-size: .86rem; font-weight: 700; width: fit-content; border-left: .2rem solid currentColor; background: var(--tint); padding: .24rem .56rem; }
 .state-done { color: var(--accent); }
+.state-withheld { color: oklch(.52 .13 75); }
 .table-scroll { max-width: 100%; max-height: 27rem; overflow: auto; }
 table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: .9rem; }
 th, td { padding: .6rem .7rem; vertical-align: top; text-align: left; border-bottom: 1px solid var(--rule); }
@@ -95,6 +96,7 @@ td a[aria-current=true] { font-weight: 750; }
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: .8rem; }
 .metrics div { border-top: .2rem solid var(--accent); background: var(--surface); padding: .78rem; min-width: 0; }
 .metrics dd { color: var(--accent); font: 700 1.55rem/1.25 var(--title-font); overflow-wrap: anywhere; }
+.sheet-metrics dd { font-size: 1.05rem; }
 .evidence select { width: fit-content; max-width: 100%; }
 .signature { border-left: .2rem solid var(--accent); padding-left: .85rem; }
 .signature p { margin: .35rem 0; overflow-wrap: anywhere; }
